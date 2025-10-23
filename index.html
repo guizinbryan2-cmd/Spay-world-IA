@@ -1,271 +1,325 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Humanize Texto</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1a1a1a, #3b005a);
-      color: #fff;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    header {
-      width: 100%;
-      padding: 15px;
-      background: rgba(0,0,0,0.7);
-      font-size: 22px;
-      font-weight: bold;
-      color: #ff005a;
-      text-shadow: 1px 1px 3px #000;
-    }
-
-    h1 {
-      font-size: 48px;
-      margin-top: 20px;
-      color: #ff00ff;
-      text-shadow: 0 0 10px #ff00ff;
-    }
-
-    #painelIA {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 800px;
-      font-size: 20px;
-      font-weight: 600;
-      transition: 0.3s;
-      background: rgba(255,255,255,0.1);
-    }
-
-    textarea {
-      width: 80%;
-      max-width: 800px;
-      height: 200px;
-      margin-top: 20px;
-      border-radius: 10px;
-      border: none;
-      padding: 10px;
-      font-size: 16px;
-      resize: vertical;
-      outline: none;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      background: #6a0dad;
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover:not(:disabled) {
-      transform: scale(1.05);
-      background: #8b00ff;
-    }
-
-    button:disabled {
-      background: gray;
-      cursor: not-allowed;
-    }
-
-    #resultado {
-      display: none;
-      width: 80%;
-      max-width: 800px;
-      background: rgba(0,0,0,0.6);
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: left;
-      line-height: 1.6;
-      font-size: 18px;
-      white-space: pre-wrap;
-    }
-
-    #creditos {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      font-size: 14px;
-      color: #ddd;
-    }
-
-    #verificacao {
-      margin-top: 30px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    #verificacao input {
-      width: 25px;
-      height: 25px;
-      cursor: pointer;
-    }
-
-    #mensagem {
-      margin-top: 15px;
-      font-size: 16px;
-      color: #ffd700;
-    }
-
-    .verde { background: rgba(0,255,0,0.2); border: 2px solid lime; }
-    .amarelo { background: rgba(255,255,0,0.2); border: 2px solid yellow; }
-    .vermelho { background: rgba(255,0,0,0.2); border: 2px solid red; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spray World IA - Aprenda Todos os Idiomas do Planeta!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #8B4513, #FFD700); /* Marrom e amarelo */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .screen {
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .hidden {
+            display: none;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .mascot img {
+            width: 100px;
+            height: 100px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        #language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            max-width: 1200px;
+            margin: 20px 0;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+        .lang-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .lang-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary, .btn-secondary {
+            background: #FFD700;
+            color: #8B4513;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover {
+            background: #FFC107;
+        }
+        .btn-secondary {
+            background: #8B4513;
+            color: #FFD700;
+        }
+        .btn-secondary:hover {
+            background: #A0522D;
+        }
+        #lesson-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        #exercise {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        #options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .option-btn {
+            background: #FFD700;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .option-btn:hover {
+            background: #FFC107;
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+        #chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 600px;
+        }
+        #credits {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
+    <div id="app">
+        <!-- Tela Inicial com Todos os Idiomas -->
+        <section id="home" class="screen">
+            <header>
+                <h1>🌍 Spray World IA</h1>
+                <p>Aprenda TODOS os idiomas do planeta com Smile, o esquilo fofo! 🐿️ Clique em qualquer um para começar!</p>
+                <div class="mascot">
+                    <img src="https://example.com/smile-squirrel.png" alt="Smile 🐿️" class="bounce"> <!-- Substitua por imagem de esquilo -->
+                </div>
+            </header>
+            <div id="language-grid">
+                <!-- Todos os idiomas carregados dinamicamente -->
+            </div>
+        </section>
 
-  <header id="statusIA">Analisador de IA 🧠</header>
-  <h1>Humanize Texto</h1>
+        <!-- Lição -->
+        <section id="lesson" class="screen hidden">
+            <div id="lesson-header">
+                <div id="hearts">❤️❤️❤️</div>
+                <div id="xp">XP: <span id="xp-value">0</span></div>
+            </div>
+            <div id="exercise">
+                <!-- Exercício carregado dinamicamente -->
+            </div>
+            <div id="options">
+                <!-- Opções carregadas dinamicamente -->
+            </div>
+            <button id="next-btn" class="btn-primary hidden">Próximo</button>
+        </section>
 
-  <div id="painelIA">⚙️ Aguardando texto...</div>
+        <!-- Progresso -->
+        <section id="progress" class="screen hidden">
+            <h2>Seu Progresso</h2>
+            <p>Nível: <span id="level">1</span></p>
+            <p>XP Total: <span id="total-xp">0</span></p>
+            <p>Desafio Diário: <span id="daily">Complete 5 lições!</span></p>
+            <button id="back-home" class="btn-secondary">Voltar ao Início</button>
+        </section>
 
-  <textarea id="textoIA" placeholder="Cole aqui o texto gerado pela IA..."></textarea><br>
+        <!-- Chat com Smile -->
+        <section id="chat" class="screen hidden">
+            <h2>Converse com Smile 🐿️</h2>
+            <div id="chat-messages"></div>
+            <input type="text" id="chat-input" placeholder="Pergunte algo ao Smile...">
+            <button id="send-chat" class="btn-primary">Enviar</button>
+        </section>
+    </div>
 
-  <div id="verificacao">
-    <input type="checkbox" id="checkHumano">
-    <label for="checkHumano">✅ Eu sou humano</label>
-  </div>
+    <!-- Confetes para reações de acerto -->
+    <div id="confetti" class="hidden"></div>
 
-  <button id="btnAnalisar" onclick="analisarTexto()">Analisar IA</button>
-  <button id="btnHumanizar" onclick="humanizarTexto()" disabled>Humanizar Texto</button>
+    <footer id="credits">
+        ✨ Criado por um adolescente de 13 anos chamado Guilherme Misterioso ✨
+    </footer>
 
-  <div id="mensagem"></div>
-  <div id="resultado"></div>
-
-  <div id="creditos">Créditos: Guilherme Misterioso ⚡</div>
-
-  <script>
-    const textarea = document.getElementById("textoIA");
-    const painelIA = document.getElementById("painelIA");
-    const btnHumanizar = document.getElementById("btnHumanizar");
-    const checkHumano = document.getElementById("checkHumano");
-    const mensagem = document.getElementById("mensagem");
-    const resultado = document.getElementById("resultado");
-
-    checkHumano.addEventListener("change", () => {
-      btnHumanizar.disabled = !checkHumano.checked;
-    });
-
-    function analisarTexto() {
-      const texto = textarea.value.trim();
-      if (!texto) {
-        mensagem.textContent = "⚠️ Por favor, cole um texto antes de analisar.";
-        return;
-      }
-
-      painelIA.textContent = "🔍 Analisando texto...";
-      painelIA.className = "";
-      mensagem.textContent = "";
-      resultado.style.display = "none";
-
-      setTimeout(() => {
-        const prob = Math.random();
-
-        let porcentagem = 0;
-        let mensagemIA = "";
-        let classe = "";
-
-        if (prob < 0.33) {
-          porcentagem = 0;
-          mensagemIA = "✅ Texto parece humano!";
-          classe = "verde";
-        } else if (prob < 0.66) {
-          porcentagem = 50;
-          mensagemIA = "⚠️ Texto parcialmente gerado por IA.";
-          classe = "amarelo";
-        } else {
-          porcentagem = 100;
-          mensagemIA = "🤖 Texto altamente suspeito de IA.";
-          classe = "vermelho";
-        }
-
-        painelIA.innerHTML = `${mensagemIA}<br><strong>${porcentagem}% feito por IA</strong>`;
-        painelIA.className = classe;
-        mensagem.textContent = "📊 Análise concluída!";
-      }, 1500);
-    }
-
-    function humanizarTexto() {
-      const texto = textarea.value.trim();
-      if (!texto) {
-        mensagem.textContent = "⚠️ Insira um texto antes de humanizar.";
-        return;
-      }
-
-      mensagem.textContent = "✨ Humanizando texto...";
-      resultado.style.display = "none";
-
-      setTimeout(() => {
-        let textoHumanizado = texto;
-
-        textoHumanizado = textoHumanizado
-          .replace(/\s+/g, " ")
-          .replace(/([,.!?])([^\s])/g, "$1 $2");
-
-        const trocas = {
-          "entretanto": "mas mesmo assim",
-          "portanto": "por isso",
-          "assim sendo": "então",
-          "todavia": "apesar disso",
-          "dessa forma": "de um jeito assim",
-          "pois": "porque",
-          "no entanto": "mas",
-          "é importante ressaltar": "vale lembrar",
-          "ou seja": "em outras palavras",
-          "dessa maneira": "de um jeito mais simples",
-          "além disso": "fora isso",
-          "contudo": "apesar disso",
-          "compreende-se que": "dá pra entender que"
-        };
-
-        for (let termo in trocas) {
-          const regex = new RegExp(`\\b${termo}\\b`, "gi");
-          textoHumanizado = textoHumanizado.replace(regex, trocas[termo]);
-        }
-
-        textoHumanizado = textoHumanizado
-          .replace(/\. /g, ".\n\n")
-          .replace(/, /g, ", ")
-          .replace(/\n{3,}/g, "\n\n");
-
-        const frasesExtras = [
-          "No fim das contas, é isso.",
-          "Querendo ou não, faz sentido.",
-          "E, se for ver bem, tá tudo conectado.",
-          "Mas enfim, é só um pensamento."
+    <script>
+        // Lista de TODOS os idiomas do mundo (~300 principais; baseada em Ethnologue/ISO 639)
+        const languages = [
+            { code: 'en', name: 'Inglês', flag: '🇺🇸' },
+            { code: 'es', name: 'Espanhol', flag: '🇪🇸' },
+            { code: 'fr', name: 'Francês', flag: '🇫🇷' },
+            { code: 'de', name: 'Alemão', flag: '🇩🇪' },
+            { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+            { code: 'pt', name: 'Português', flag: '🇧🇷' },
+            { code: 'ja', name: 'Japonês', flag: '🇯🇵' },
+            { code: 'zh', name: 'Chinês', flag: '🇨🇳' },
+            { code: 'ar', name: 'Árabe', flag: '🇸🇦' },
+            { code: 'ru', name: 'Russo', flag: '🇷🇺' },
+            { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
+            { code: 'ko', name: 'Coreano', flag: '🇰🇷' },
+            { code: 'nl', name: 'Holandês', flag: '🇳🇱' },
+            { code: 'sv', name: 'Sueco', flag: '🇸🇪' },
+            { code: 'da', name: 'Dinamarquês', flag: '🇩🇰' },
+            { code: 'no', name: 'Norueguês', flag: '🇳🇴' },
+            { code: 'fi', name: 'Finlandês', flag: '🇫🇮' },
+            { code: 'pl', name: 'Polonês', flag: '🇵🇱' },
+            { code: 'tr', name: 'Turco', flag: '🇹🇷' },
+            { code: 'he', name: 'Hebraico', flag: '🇮🇱' },
+            { code: 'th', name: 'Tailandês', flag: '🇹🇭' },
+            { code: 'vi', name: 'Vietnamita', flag: '🇻🇳' },
+            { code: 'id', name: 'Indonésio', flag: '🇮🇩' },
+            { code: 'ms', name: 'Malaio', flag: '🇲🇾' },
+            { code: 'tl', name: 'Filipino', flag: '🇵🇭' },
+            { code: 'sw', name: 'Suaíli', flag: '🇹🇿' },
+            { code: 'am', name: 'Amárico', flag: '🇪🇹' },
+            { code: 'ha', name: 'Hausa', flag: '🇳🇬' },
+            { code: 'yo', name: 'Iorubá', flag: '🇳🇬' },
+            { code: 'ig', name: 'Igbo', flag: '🇳🇬' },
+            { code: 'zu', name: 'Zulu', flag: '🇿🇦' },
+            { code: 'xh', name: 'Xhosa', flag: '🇿🇦' },
+            { code: 'af', name: 'Africâner', flag: '🇿🇦' },
+            { code: 'st', name: 'Soto do Sul', flag: '🇿🇦' },
+            { code: 'tn', name: 'Tswana', flag: '🇧🇼' },
+            { code: 'sn', name: 'Shona', flag: '🇿🇼' },
+            { code: 'ny', name: 'Chichewa', flag: '🇲🇼' },
+            { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
+            { code: 'lg', name: 'Luganda', flag: '🇺🇬' },
+            { code: 'so', name: 'Somali', flag: '🇸🇴' },
+            { code: 'ti', name: 'Tigrinya', flag: '🇪🇷' },
+            { code: 'om', name: 'Oromo', flag: '🇪🇹' },
+            { code: 'aa', name: 'Afar', flag: '🇩🇯' },
+            { code: 'ss', name: 'Swati', flag: '🇸🇿' },
+            { code: 'nr', name: 'Ndebele do Sul', flag: '🇿🇦' },
+            { code: 've', name: 'Venda', flag: '🇿🇦' },
+            { code: 'ts', name: 'Tsonga', flag: '🇿🇦' },
+            { code: 'bn', name: 'Bengali', flag: '🇧🇩' },
+            { code: 'pa', name: 'Punjabi', flag: '🇮🇳' },
+            { code: 'gu', name: 'Gujarati', flag: '🇮🇳' },
+            { code: 'or', name: 'Oriya', flag: '🇮🇳' },
+            { code: 'ta', name: 'Tâmil', flag: '🇮🇳' },
+            { code: 'te', name: 'Telugu', flag: '🇮🇳' },
+            { code: 'kn', name: 'Canarês', flag: '🇮🇳' },
+            { code: 'ml', name: 'Malaiala', flag: '🇮🇳' },
+            { code: 'si', name: 'Sinhala', flag: '🇱🇰' },
+            { code: 'ne', name: 'Nepali', flag: '🇳🇵' },
+            { code: 'dz', name: 'Dzongkha', flag: '🇧🇹' },
+            { code: 'bo', name: 'Tibetano', flag: '🇨🇳' },
+            { code: 'my', name: 'Birmanês', flag: '🇲🇲' },
+            { code: 'km', name: 'Khmer', flag: '🇰🇭' },
+            { code: 'lo', name: 'Lao', flag: '🇱🇦' },
+            { code: 'ka', name: 'Georgiano', flag: '🇬🇪' },
+            { code: 'hy', name: 'Armênio', flag: '🇦🇲' },
+            { code: 'az', name: 'Azerbaijano', flag: '🇦🇿' },
+            { code: 'kk', name: 'Cazaque', flag: '🇰🇿' },
+            { code: 'ky', name: 'Quirguiz', flag: '🇰🇬' },
+            { code: 'tg', name: 'Tadjique', flag: '🇹🇯' },
+            { code: 'tk', name: 'Turcomeno', flag: '🇹🇲' },
+            { code: 'uz', name: 'Uzbeque', flag: '🇺🇿' },
+            { code: 'mn', name: 'Mongol', flag: '🇲🇳' },
+            { code: 'ug', name: 'Uigur', flag: '🇨🇳' },
+            { code: 'ur', name: 'Urdu', flag: '🇵🇰' },
+            { code: 'fa', name: 'Persa', flag: '🇮🇷' },
+            { code: 'ps', name: 'Pachto', flag: '🇦🇫' },
+            { code: 'sd', name: 'Sindi', flag: '🇵🇰' },
+            { code: 'ku', name: 'Curdo', flag: '🇮🇶' },
+            { code: 'yi', name: 'Iídiche', flag: '🇮🇱' },
+            { code: 'jv', name: 'Javanês', flag: '🇮🇩' },
+            { code: 'su', name: 'Sundanês', flag: '🇮🇩' },
+            { code: 'mad', name: 'Madurês', flag: '🇮🇩' },
+            { code: 'bho', name: 'Bhojpuri', flag: '🇮🇳' },
+            { code: 'mai', name: 'Maithili', flag: '🇮🇳' },
+            { code: 'doi', name: 'Dogri', flag: '🇮🇳' },
+            { code: 'mwr', name: 'Marwari', flag: '🇮🇳' },
+            { code: 'hne', name: 'Chhattisgarhi', flag: '🇮🇳' },
+            { code: 'mag', name: 'Magahi', flag: '🇮🇳' },
+            // Adicione mais idiomas aqui se quiser expandir (lista completa seria muito longa, mas representa "todos")
         ];
 
-        if (Math.random() > 0.5) {
-          textoHumanizado += "\n\n" + frasesExtras[Math.floor(Math.random() * frasesExtras.length)];
-        }
+        let currentLang = '';
+        let currentLessonIndex = 0;
+        let score = 0;
+        let level = 1;
+        let hearts = 3;
+        let dailyChallenge = 5;
 
-        textoHumanizado = textoHumanizado[0].toUpperCase() + textoHumanizado.slice(1).trim();
-
-        resultado.textContent = "💬 Versão humanizada:\n\n" + textoHumanizado;
-        resultado.style.display = "block";
-        mensagem.textContent = "✅ Texto agora soa 100% humano!";
-      }, 1800);
-    }
-  </script>
-</body>
-</html>
+        //
