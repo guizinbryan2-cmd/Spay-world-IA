@@ -3,37 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spray World IA - Aprenda Todos os Idiomas do Planeta!</title>
+    <title>Spray World IA - Aprenda Idiomas de Forma Divertida!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Ícones similares ao Duolingo -->
     <style>
+        /* Estilos Gerais - Tema Marrom e Amarelo, Alegre e Leve */
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #8B4513, #FFD700); /* Marrom e amarelo */
+            background: linear-gradient(135deg, #D2691E, #FFD700); /* Marrom e amarelo */
             color: #333;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
             overflow-x: hidden;
         }
-        .screen {
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .hidden {
-            display: none;
-        }
         header {
+            background: #8B4513; /* Marrom escuro */
+            color: #FFD700;
+            padding: 20px;
             text-align: center;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .mascot img {
-            width: 100px;
-            height: 100px;
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .button {
+            background: #FFD700;
+            color: #8B4513;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .button:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+        .button:active {
+            transform: scale(0.95);
+        }
+        .lesson-card {
+            background: #FFF8DC;
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            width: 200px;
+        }
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #DDD;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #FFD700;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: #FFF;
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+        }
+        .chat-header {
+            background: #8B4513;
+            color: #FFD700;
+            padding: 10px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .chat-input {
+            padding: 10px;
+            border-top: 1px solid #DDD;
+        }
+        .chat-input input {
+            width: 80%;
+            padding: 5px;
+            border: 1px solid #DDD;
+            border-radius: 5px;
+        }
+        .chat-input button {
+            width: 15%;
+            background: #FFD700;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .credits {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #FFD700;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            z-index: 1000;
+        }
+        .mascot {
+            position: absolute;
+            top: 50px;
+            right: 50px;
             animation: bounce 2s infinite;
         }
         @keyframes bounce {
@@ -41,285 +149,228 @@
             40% { transform: translateY(-10px); }
             60% { transform: translateY(-5px); }
         }
-        #language-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            max-width: 1200px;
-            margin: 20px 0;
-            overflow-y: auto;
-            max-height: 70vh;
-        }
-        .lang-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .lang-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-        .btn-primary, .btn-secondary {
-            background: #FFD700;
-            color: #8B4513;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-            transition: background 0.3s;
-        }
-        .btn-primary:hover {
-            background: #FFC107;
-        }
-        .btn-secondary {
-            background: #8B4513;
-            color: #FFD700;
-        }
-        .btn-secondary:hover {
-            background: #A0522D;
-        }
-        #lesson-header {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
-        #exercise {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
-        #options {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
-        .option-btn {
-            background: #FFD700;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .option-btn:hover {
-            background: #FFC107;
-        }
-        .shake {
-            animation: shake 0.5s;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        #confetti {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-        }
-        .confetti-piece {
+        .reaction {
+            font-size: 2em;
+            display: none;
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #FFD700;
-            animation: fall 3s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: fade 1s ease-out;
         }
-        @keyframes fall {
-            0% { transform: translateY(-100vh) rotate(0deg); }
-            100% { transform: translateY(100vh) rotate(360deg); }
+        @keyframes fade {
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
-        #chat-messages {
-            height: 300px;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.9);
+        .languages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .language-card {
+            background: #FFF8DC;
             padding: 10px;
             border-radius: 10px;
-            margin-bottom: 10px;
-            width: 100%;
-            max-width: 600px;
-        }
-        #credits {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <!-- Tela Inicial com Todos os Idiomas -->
-        <section id="home" class="screen">
-            <header>
-                <h1>🌍 Spray World IA</h1>
-                <p>Aprenda TODOS os idiomas do planeta com Smile, o esquilo fofo! 🐿️ Clique em qualquer um para começar!</p>
-                <div class="mascot">
-                    <img src="https://example.com/smile-squirrel.png" alt="Smile 🐿️" class="bounce"> <!-- Substitua por imagem de esquilo -->
-                </div>
-            </header>
-            <div id="language-grid">
-                <!-- Todos os idiomas carregados dinamicamente -->
-            </div>
-        </section>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>🌍 Spray World IA - Aprenda Todos os Idiomas do Mundo!</h1>
+        <p>Com Smile, o esquilo fofo, aprenda de forma divertida e rápida! 🐿️</p>
+    </header>
 
-        <!-- Lição -->
-        <section id="lesson" class="screen hidden">
-            <div id="lesson-header">
-                <div id="hearts">❤️❤️❤️</div>
-                <div id="xp">XP: <span id="xp-value">0</span></div>
-            </div>
-            <div id="exercise">
-                <!-- Exercício carregado dinamicamente -->
-            </div>
-            <div id="options">
-                <!-- Opções carregadas dinamicamente -->
-            </div>
-            <button id="next-btn" class="btn-primary hidden">Próximo</button>
-        </section>
-
-        <!-- Progresso -->
-        <section id="progress" class="screen hidden">
-            <h2>Seu Progresso</h2>
-            <p>Nível: <span id="level">1</span></p>
-            <p>XP Total: <span id="total-xp">0</span></p>
-            <p>Desafio Diário: <span id="daily">Complete 5 lições!</span></p>
-            <button id="back-home" class="btn-secondary">Voltar ao Início</button>
-        </section>
-
-        <!-- Chat com Smile -->
-        <section id="chat" class="screen hidden">
-            <h2>Converse com Smile 🐿️</h2>
-            <div id="chat-messages"></div>
-            <input type="text" id="chat-input" placeholder="Pergunte algo ao Smile...">
-            <button id="send-chat" class="btn-primary">Enviar</button>
-        </section>
+    <!-- Mascote Animado -->
+    <div class="mascot">
+        <i class="fas fa-squirrel" style="font-size: 4em; color: #8B4513;"></i>
+        <p>Olá! Sou Smile! Vamos aprender juntos? 😊</p>
     </div>
 
-    <!-- Confetes para reações de acerto -->
-    <div id="confetti" class="hidden"></div>
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <!-- Seção de Idiomas -->
+        <div class="section">
+            <h2>Escolha um Idioma para Aprender</h2>
+            <p>Todos os idiomas do planeta estão disponíveis! (Mais de 7.000 opções)</p>
+            <div class="languages">
+                <!-- Lista de idiomas (exemplo com alguns; em produção, liste todos) -->
+                <div class="language-card" onclick="selectLanguage('Português')">Português</div>
+                <div class="language-card" onclick="selectLanguage('Inglês')">Inglês</div>
+                <div class="language-card" onclick="selectLanguage('Espanhol')">Espanhol</div>
+                <div class="language-card" onclick="selectLanguage('Francês')">Francês</div>
+                <div class="language-card" onclick="selectLanguage('Alemão')">Alemão</div>
+                <div class="language-card" onclick="selectLanguage('Italiano')">Italiano</div>
+                <div class="language-card" onclick="selectLanguage('Japonês')">Japonês</div>
+                <div class="language-card" onclick="selectLanguage('Mandarim')">Mandarim</div>
+                <div class="language-card" onclick="selectLanguage('Árabe')">Árabe</div>
+                <div class="language-card" onclick="selectLanguage('Hindi')">Hindi</div>
+                <!-- Adicione todos os outros idiomas aqui (mais de 7.000) -->
+                <div class="language-card" onclick="selectLanguage('Outro')">... e todos os outros!</div>
+            </div>
+        </div>
 
-    <footer id="credits">
+        <!-- Aulas Interativas -->
+        <div class="section">
+            <h2>Aulas Interativas</h2>
+            <div class="lesson-card" onclick="startLesson('Vocabulário Básico')">
+                <i class="fas fa-book"></i>
+                <h3>Vocabulário Básico</h3>
+                <p>Aprenda palavras essenciais!</p>
+            </div>
+            <div class="lesson-card" onclick="startLesson('Gramática')">
+                <i class="fas fa-pencil-alt"></i>
+                <h3>Gramática</h3>
+                <p>Entenda as regras!</p>
+            </div>
+            <div class="lesson-card" onclick="startLesson('Conversação')">
+                <i class="fas fa-comments"></i>
+                <h3>Conversação</h3>
+                <p>Pratique falando!</p>
+            </div>
+        </div>
+
+        <!-- Sistema de Níveis e Pontuação -->
+        <div class="section">
+            <h2>Seu Progresso</h2>
+            <p>Nível Atual: <span id="level">1</span> | Pontos: <span id="points">0</span></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <button class="button" onclick="completeChallenge()">Completar Desafio Diário</button>
+        </div>
+
+        <!-- Opções de Interação -->
+        <div class="section">
+            <h2>Pratique Agora!</h2>
+            <button class="button" onclick="speak()">Falar por Voz</button>
+            <button class="button" onclick="write()">Escrever</button>
+            <button class="button" onclick="listen()">Ouvir Pronúncia</button>
+        </div>
+    </div>
+
+    <!-- Chat com Mascote -->
+    <div class="chat" id="chat">
+        <div class="chat-header">
+            <i class="fas fa-squirrel"></i> Chat com Smile 🐿️
+        </div>
+        <div class="chat-messages" id="messages">
+            <p><strong>Smile:</strong> Olá! Pronto para aprender? Me pergunte qualquer coisa! 😄</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Digite sua mensagem...">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <!-- Botão para Abrir Chat -->
+    <button class="button" style="position: fixed; bottom: 20px; left: 20px;" onclick="toggleChat()">Conversar com Smile</button>
+
+    <!-- Reações (como no Duolingo) -->
+    <div class="reaction" id="reaction">🎉 Correto! 🎉</div>
+
+    <!-- Créditos -->
+    <div class="credits">
         ✨ Criado por um adolescente de 13 anos chamado Guilherme Misterioso ✨
-    </footer>
+    </div>
 
     <script>
-        // Lista de TODOS os idiomas do mundo (~300 principais; baseada em Ethnologue/ISO 639)
-        const languages = [
-            { code: 'en', name: 'Inglês', flag: '🇺🇸' },
-            { code: 'es', name: 'Espanhol', flag: '🇪🇸' },
-            { code: 'fr', name: 'Francês', flag: '🇫🇷' },
-            { code: 'de', name: 'Alemão', flag: '🇩🇪' },
-            { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-            { code: 'pt', name: 'Português', flag: '🇧🇷' },
-            { code: 'ja', name: 'Japonês', flag: '🇯🇵' },
-            { code: 'zh', name: 'Chinês', flag: '🇨🇳' },
-            { code: 'ar', name: 'Árabe', flag: '🇸🇦' },
-            { code: 'ru', name: 'Russo', flag: '🇷🇺' },
-            { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
-            { code: 'ko', name: 'Coreano', flag: '🇰🇷' },
-            { code: 'nl', name: 'Holandês', flag: '🇳🇱' },
-            { code: 'sv', name: 'Sueco', flag: '🇸🇪' },
-            { code: 'da', name: 'Dinamarquês', flag: '🇩🇰' },
-            { code: 'no', name: 'Norueguês', flag: '🇳🇴' },
-            { code: 'fi', name: 'Finlandês', flag: '🇫🇮' },
-            { code: 'pl', name: 'Polonês', flag: '🇵🇱' },
-            { code: 'tr', name: 'Turco', flag: '🇹🇷' },
-            { code: 'he', name: 'Hebraico', flag: '🇮🇱' },
-            { code: 'th', name: 'Tailandês', flag: '🇹🇭' },
-            { code: 'vi', name: 'Vietnamita', flag: '🇻🇳' },
-            { code: 'id', name: 'Indonésio', flag: '🇮🇩' },
-            { code: 'ms', name: 'Malaio', flag: '🇲🇾' },
-            { code: 'tl', name: 'Filipino', flag: '🇵🇭' },
-            { code: 'sw', name: 'Suaíli', flag: '🇹🇿' },
-            { code: 'am', name: 'Amárico', flag: '🇪🇹' },
-            { code: 'ha', name: 'Hausa', flag: '🇳🇬' },
-            { code: 'yo', name: 'Iorubá', flag: '🇳🇬' },
-            { code: 'ig', name: 'Igbo', flag: '🇳🇬' },
-            { code: 'zu', name: 'Zulu', flag: '🇿🇦' },
-            { code: 'xh', name: 'Xhosa', flag: '🇿🇦' },
-            { code: 'af', name: 'Africâner', flag: '🇿🇦' },
-            { code: 'st', name: 'Soto do Sul', flag: '🇿🇦' },
-            { code: 'tn', name: 'Tswana', flag: '🇧🇼' },
-            { code: 'sn', name: 'Shona', flag: '🇿🇼' },
-            { code: 'ny', name: 'Chichewa', flag: '🇲🇼' },
-            { code: 'rw', name: 'Kinyarwanda', flag: '🇷🇼' },
-            { code: 'lg', name: 'Luganda', flag: '🇺🇬' },
-            { code: 'so', name: 'Somali', flag: '🇸🇴' },
-            { code: 'ti', name: 'Tigrinya', flag: '🇪🇷' },
-            { code: 'om', name: 'Oromo', flag: '🇪🇹' },
-            { code: 'aa', name: 'Afar', flag: '🇩🇯' },
-            { code: 'ss', name: 'Swati', flag: '🇸🇿' },
-            { code: 'nr', name: 'Ndebele do Sul', flag: '🇿🇦' },
-            { code: 've', name: 'Venda', flag: '🇿🇦' },
-            { code: 'ts', name: 'Tsonga', flag: '🇿🇦' },
-            { code: 'bn', name: 'Bengali', flag: '🇧🇩' },
-            { code: 'pa', name: 'Punjabi', flag: '🇮🇳' },
-            { code: 'gu', name: 'Gujarati', flag: '🇮🇳' },
-            { code: 'or', name: 'Oriya', flag: '🇮🇳' },
-            { code: 'ta', name: 'Tâmil', flag: '🇮🇳' },
-            { code: 'te', name: 'Telugu', flag: '🇮🇳' },
-            { code: 'kn', name: 'Canarês', flag: '🇮🇳' },
-            { code: 'ml', name: 'Malaiala', flag: '🇮🇳' },
-            { code: 'si', name: 'Sinhala', flag: '🇱🇰' },
-            { code: 'ne', name: 'Nepali', flag: '🇳🇵' },
-            { code: 'dz', name: 'Dzongkha', flag: '🇧🇹' },
-            { code: 'bo', name: 'Tibetano', flag: '🇨🇳' },
-            { code: 'my', name: 'Birmanês', flag: '🇲🇲' },
-            { code: 'km', name: 'Khmer', flag: '🇰🇭' },
-            { code: 'lo', name: 'Lao', flag: '🇱🇦' },
-            { code: 'ka', name: 'Georgiano', flag: '🇬🇪' },
-            { code: 'hy', name: 'Armênio', flag: '🇦🇲' },
-            { code: 'az', name: 'Azerbaijano', flag: '🇦🇿' },
-            { code: 'kk', name: 'Cazaque', flag: '🇰🇿' },
-            { code: 'ky', name: 'Quirguiz', flag: '🇰🇬' },
-            { code: 'tg', name: 'Tadjique', flag: '🇹🇯' },
-            { code: 'tk', name: 'Turcomeno', flag: '🇹🇲' },
-            { code: 'uz', name: 'Uzbeque', flag: '🇺🇿' },
-            { code: 'mn', name: 'Mongol', flag: '🇲🇳' },
-            { code: 'ug', name: 'Uigur', flag: '🇨🇳' },
-            { code: 'ur', name: 'Urdu', flag: '🇵🇰' },
-            { code: 'fa', name: 'Persa', flag: '🇮🇷' },
-            { code: 'ps', name: 'Pachto', flag: '🇦🇫' },
-            { code: 'sd', name: 'Sindi', flag: '🇵🇰' },
-            { code: 'ku', name: 'Curdo', flag: '🇮🇶' },
-            { code: 'yi', name: 'Iídiche', flag: '🇮🇱' },
-            { code: 'jv', name: 'Javanês', flag: '🇮🇩' },
-            { code: 'su', name: 'Sundanês', flag: '🇮🇩' },
-            { code: 'mad', name: 'Madurês', flag: '🇮🇩' },
-            { code: 'bho', name: 'Bhojpuri', flag: '🇮🇳' },
-            { code: 'mai', name: 'Maithili', flag: '🇮🇳' },
-            { code: 'doi', name: 'Dogri', flag: '🇮🇳' },
-            { code: 'mwr', name: 'Marwari', flag: '🇮🇳' },
-            { code: 'hne', name: 'Chhattisgarhi', flag: '🇮🇳' },
-            { code: 'mag', name: 'Magahi', flag: '🇮🇳' },
-            // Adicione mais idiomas aqui se quiser expandir (lista completa seria muito longa, mas representa "todos")
-        ];
-
-        let currentLang = '';
-        let currentLessonIndex = 0;
-        let score = 0;
+        // Variáveis de Estado
         let level = 1;
-        let hearts = 3;
-        let dailyChallenge = 5;
+        let points = 0;
+        let progress = 0;
 
-        //
+        // Selecionar Idioma
+        function selectLanguage(lang) {
+            alert(`Idioma selecionado: ${lang}. Vamos começar!`);
+            // Em produção, redirecionar para aulas do idioma.
+        }
+
+        // Iniciar Aula
+        function startLesson(lesson) {
+            alert(`Iniciando aula: ${lesson}. Boa sorte!`);
+            // Simular aula interativa (em produção, abrir modal ou página).
+            showReaction(true);
+            updateProgress(10);
+        }
+
+        // Completar Desafio Diário
+        function completeChallenge() {
+            points += 50;
+            level = Math.floor(points / 100) + 1;
+            updateProgress(20);
+            document.getElementById('points').textContent = points;
+            document.getElementById('level').textContent = level;
+            showReaction(true);
+        }
+
+        // Atualizar Barra de Progresso
+        function updateProgress(add) {
+            progress += add;
+            if (progress > 100) progress = 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        // Falar por Voz (Simulado)
+        function speak() {
+            alert('Fale agora! (Em produção, use Web Speech API)');
+            // Placeholder: navigator.mediaDevices.getUserMedia() para voz real.
+        }
+
+        // Escrever
+        function write() {
+            let text = prompt('Escreva uma frase:');
+            if (text) {
+                alert('Frase escrita: ' + text + '. Correto!');
+                showReaction(true);
+                updateProgress(5);
+            }
+        }
+
+        // Ouvir Pronúncia (Simulado)
+        function listen() {
+            alert('Ouça a pronúncia! (Em produção, reproduza áudio)');
+            // Placeholder: new Audio('url').play();
+        }
+
+        // Mostrar Reação
+        function showReaction(correct) {
+            let reaction = document.getElementById('reaction');
+            reaction.textContent = correct ? '🎉 Correto! 🎉' : '😅 Tente novamente!';
+            reaction.style.display = 'block';
+            setTimeout(() => reaction.style.display = 'none', 1000);
+        }
+
+        // Toggle Chat
+        function toggleChat() {
+            let chat = document.getElementById('chat');
+            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Enviar Mensagem no Chat
+        function sendMessage() {
+            let input = document.getElementById('chatInput');
+            let messages = document.getElementById('messages');
+            if (input.value.trim()) {
+                messages.innerHTML += `<p><strong>Você:</strong> ${input.value}</p>`;
+                // Resposta simulada de Smile
+                setTimeout(() => {
+                    messages.innerHTML += `<p><strong>Smile:</strong> ${getSmileResponse(input.value)}</p>`;
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1000);
+                input.value = '';
+            }
+        }
+
+        // Respostas de Smile (Engraçadas e Motivadoras)
+        function getSmileResponse(message) {
+            if (message.toLowerCase().includes('oi')) return 'Oi! Vamos aprender algo novo hoje? 🐿️';
+            if (message.toLowerCase().includes('ajuda')) return 'Claro! Eu sou seu amigo esquilo. Pergunte sobre idiomas! 😄';
+            return 'Haha, isso é engraçado! Continue estudando, você é incrível! 🌟';
+        }
+    </script>
+</body>
+    </html>
+    
